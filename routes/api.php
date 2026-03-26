@@ -12,9 +12,11 @@ Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'profile']);
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::put('/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{id}', [ProductController::class, 'update']);
+        Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    });
 
 
 

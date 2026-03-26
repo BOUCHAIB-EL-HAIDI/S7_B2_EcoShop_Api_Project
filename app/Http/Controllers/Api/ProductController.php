@@ -11,14 +11,15 @@ class ProductController extends Controller
 
      public function index(){
 
-      $products = Product::all();
+      $products = Product::with('category')->get();
 
       return response()->json($products);
      }
 
      public function show($id)
      {
-     $product = Product::find($id);
+     $product = Product::with('category')->find($id);
+
      if(!$product){
 
      return response()->json([
@@ -34,6 +35,16 @@ class ProductController extends Controller
 
      public function store(Request $request)
      {
+
+
+
+      if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'Only admins can create products'
+            ], 403);
+        }
+
+
       $request->validate([
         'name'   =>'required|string|max:255|unique:products,name',
         'description' =>'nullable|string',
@@ -56,6 +67,13 @@ class ProductController extends Controller
 
      public function update(Request $request , $id)
      {
+
+
+     if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'Only admins can update products'
+            ], 403);
+        }
 
       $product = Product::find($id);
 
@@ -87,6 +105,15 @@ class ProductController extends Controller
 
      public function destroy($id)
     {
+
+      if ($request->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'Only admins can delete products'
+            ], 403);
+        }
+
+
+
         $product = Product::find($id);
 
         if (!$product) {
