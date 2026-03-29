@@ -11,6 +11,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\CartItem;
+
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
@@ -18,7 +22,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
-   protected $fillable = [
+    protected $fillable = [
         'name',
         'email',
         'password',
@@ -37,6 +41,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+   public function cartItems()
+    {
+    return $this->hasMany(CartItem::class);
+   }
+
+
+
+
+
+
 
     protected function casts(): array
     {

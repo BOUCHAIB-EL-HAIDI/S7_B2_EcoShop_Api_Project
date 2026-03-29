@@ -10,11 +10,16 @@ class ProductController extends Controller
 {
 
 
-     public function index(){
+     public function index(Request $request){
+       $query = Product::with('category');
 
-      $products = Product::with('category')->get();
+       if ($request->has('category_id')) {
+           $query->where('category_id', $request->category_id);
+       }
 
-      return response()->json($products);
+       $products = $query->get();
+
+       return response()->json($products);
      }
 
      public function show($id)
@@ -104,7 +109,7 @@ class ProductController extends Controller
      }
 
 
-     public function destroy($id)
+     public function destroy(Request $request, $id)
     {
 
       if ($request->user()->role !== 'admin') {
