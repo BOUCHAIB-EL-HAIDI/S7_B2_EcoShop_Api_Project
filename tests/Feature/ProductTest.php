@@ -13,7 +13,7 @@ test('guest can see products', function () {
     $response = $this->getJson('/api/products');
 
     $response->assertStatus(200)
-        ->assertJsonCount(3);
+        ->assertJsonCount(3, 'data');
 });
 
 test('guest can see single product', function () {
