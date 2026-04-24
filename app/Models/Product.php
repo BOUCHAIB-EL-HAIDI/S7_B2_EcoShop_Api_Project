@@ -15,7 +15,19 @@ class Product extends Model
         'price',
         'stock',
         'category_id',
+        'image',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) return null;
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
+        }
+        return asset('storage/' . $this->image);
+    }
 
     public function category()
     {
