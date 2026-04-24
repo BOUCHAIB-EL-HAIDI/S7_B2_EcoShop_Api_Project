@@ -13,11 +13,13 @@ class OrderController extends Controller
     // 📦 Get all user orders
     public function index(Request $request)
     {
-        $orders = $request->user()
-            ->orders()
-            ->with('items.product')
-            ->latest()
-            ->get();
+        $query = Order::with(['items.product', 'user']);
+
+        if ($request->user()->role !== 'admin') {
+            $query->where('user_id', $request->user()->id);
+        }
+
+        $orders = $query->latest()->get();
 
         return response()->json($orders);
     }
